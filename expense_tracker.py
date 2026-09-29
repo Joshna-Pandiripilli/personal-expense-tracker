@@ -1,4 +1,10 @@
-list1= []
+import json
+list1 = []
+try:
+        with open("./day2/data/file.json", encoding= "utf-8") as h:
+                list1 = json.load(h)
+except FileNotFoundError:
+       list1 = []
 total = 0
 while True:
     print("=" * 10, "PERSONAL EXPENSE TRACKER", "=" * 10)
@@ -51,6 +57,10 @@ while True:
             break
     else:
             print("Enter a valid number")
+with open("./day2/data/file.json","w", encoding= "utf8") as f:
+       json.dump(list1, f, ensure_ascii = False, indent = 4 )
+
+
 
 
 
