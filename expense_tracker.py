@@ -6,6 +6,7 @@ try:
 except FileNotFoundError:
        list1 = []
 total = 0
+found = True
 while True:
     print("=" * 10, "PERSONAL EXPENSE TRACKER", "=" * 10)
     print("1. Add expense")
@@ -13,7 +14,8 @@ while True:
     print("3. View total spending")
     print("4. View spending by category")
     print("5. Check remaining budget")
-    print("6. Exit")
+    print("6. Delete expense is selected")
+    print("7. Exit")
     choice = int(input("Enter your choice:"))
     ("you entered:", choice)
     if choice == 1:
@@ -28,7 +30,8 @@ while True:
         list1.append(expense)
     elif choice == 2:
             print("View expenses selected")
-            print(list1)
+            for index, item in enumerate(list1):
+                   print(f"{index + 1}. {item["name"]} - {item["amount"]} - {item["category"]}")
     elif choice == 3:
             print("View total spending selected")
             total = 0
@@ -51,16 +54,19 @@ while True:
             for val in list1:
                 current_spent += val["amount"]
             result = budget -  current_spent
-            print("The remaining budget is :", result)    
+            print("The remaining budget is :", result)
     elif choice == 6:
-            print("Exit")
-            break
+            print("Delete expense is selected")
+            del_ex_index = int(input("enter the name of the expense to be deleted:")) - 1
+            if 0 <= del_ex_index < len(list1):
+                list1.pop(del_ex_index)
+            else:
+                   print("enter a valid index")
+    elif choice == 7:
+           print("Exit")
+           break
     else:
-            print("Enter a valid number")
+           print("Enter a valid number")
+
 with open("./day2/data/file.json","w", encoding= "utf8") as f:
        json.dump(list1, f, ensure_ascii = False, indent = 4 )
-
-
-
-
-
