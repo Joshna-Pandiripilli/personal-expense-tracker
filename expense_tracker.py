@@ -1,8 +1,13 @@
 import json
 list1 = []
+class Expense:
+        def __init__(self, name, amount, category):
+              self.name = name
+              self.amount = amount
+              self.category = category
 try:
-        with open("./day2/data/file.json", encoding= "utf-8") as h:
-                list1 = json.load(h)
+    with open("./day2/data/file.json", encoding= "utf-8") as h:
+        list1 = json.load(h)
 except FileNotFoundError:
        list1 = []
 total = 0
@@ -17,17 +22,13 @@ while True:
     print("6. Delete expense is selected")
     print("7. Exit")
     choice = int(input("Enter your choice:"))
-    ("you entered:", choice)
     if choice == 1:
         print("Add expense selected")
         a = input("expense_name:")
         b = int(input("expense amount:"))
         c = input("expense category:")
-        expense = { "name" :a,
-                    "amount" : b,
-                    "category" : c
-                    }
-        list1.append(expense)
+        expense = Expense(a, b, c)
+        list1.append(expense.__dict__)
     elif choice == 2:
             print("View expenses selected")
             for index, item in enumerate(list1):
@@ -57,7 +58,7 @@ while True:
             print("The remaining budget is :", result)
     elif choice == 6:
             print("Delete expense is selected")
-            del_ex_index = int(input("enter the name of the expense to be deleted:")) - 1
+            del_ex_index = int(input("enter the number of the expense to be deleted:")) - 1
             if 0 <= del_ex_index < len(list1):
                 list1.pop(del_ex_index)
             else:
