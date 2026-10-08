@@ -1,14 +1,23 @@
 import json
-list1 = []
+def save_data(data, filepath = "./day2/data/file.json"):
+       with open(filepath, "w", encoding= "utf-8") as f:
+              json.dump(data, f, ensure_ascii= False, indent= 4)
 class Expense:
-        def __init__(self, name, amount, category):
+       def __init__(self, name, amount, category):
               self.name = name
               self.amount = amount
               self.category = category
+       def dict1(self):
+              return{    
+              "name" : self.name,
+              "amount" : self.amount,
+              "category" : self.category 
+              }
+list1 = []
 try:
-    with open("./day2/data/file.json", encoding= "utf-8") as h:
-        list1 = json.load(h)
-except FileNotFoundError:
+        with open("./day2/data/file.json", encoding= "utf-8") as h:
+                list1 = json.load(h)
+except (FileNotFoundError, json.JSONDecodeError):
        list1 = []
 total = 0
 found = True
@@ -21,25 +30,29 @@ while True:
     print("5. Check remaining budget")
     print("6. Delete expense is selected")
     print("7. Exit")
-    choice = int(input("Enter your choice:"))
-    if choice == 1:
-        print("Add expense selected")
-        a = input("expense_name:")
-        b = int(input("expense amount:"))
-        c = input("expense category:")
-        expense = Expense(a, b, c)
-        list1.append(expense.__dict__)
-    elif choice == 2:
+    try :
+       choice = int(input("Enter your choice:"))
+       print("you entered:", choice)
+       if choice == 1:
+              print("Add expense selected")
+              a = input("expense_name:")
+              b = int(input("expense amount:"))
+              c = input("expense category:")
+              expense = Expense(a,b,c)
+              list1.append(expense.dict1())
+              save_data(list1)
+              print("Expense saved Successfully!")
+       elif choice == 2:
             print("View expenses selected")
             for index, item in enumerate(list1):
                    print(f"{index + 1}. {item["name"]} - {item["amount"]} - {item["category"]}")
-    elif choice == 3:
+       elif choice == 3:
             print("View total spending selected")
             total = 0
             for val in list1:
                        total += val["amount"]
             print("Total spending is", total)
-    elif choice == 4:
+       elif choice == 4:
             print("View spending by category selected")
             dict1 = {}
             for val in list1:
@@ -48,7 +61,7 @@ while True:
                    else:
                           dict1[val["category"]] = val["amount"]
             print(dict1)
-    elif choice == 5:
+       elif choice == 5:
             print("Check remaining budget selected")
             budget = int(input("Enter the total budget: "))
             current_spent = 0
@@ -56,18 +69,19 @@ while True:
                 current_spent += val["amount"]
             result = budget -  current_spent
             print("The remaining budget is :", result)
-    elif choice == 6:
+       elif choice == 6:
             print("Delete expense is selected")
-            del_ex_index = int(input("enter the number of the expense to be deleted:")) - 1
+            del_ex_index = int(input("enter the index of the expense to be deleted:")) - 1
             if 0 <= del_ex_index < len(list1):
                 list1.pop(del_ex_index)
+                save_data(list1)
+                print("deleted the expense successfully")
             else:
                    print("enter a valid index")
-    elif choice == 7:
+       elif choice == 7:
            print("Exit")
            break
-    else:
+       else:
            print("Enter a valid number")
-
-with open("./day2/data/file.json","w", encoding= "utf8") as f:
-       json.dump(list1, f, ensure_ascii = False, indent = 4 )
+    except ValueError:
+          print("enter only integer values between 1 to 7")
